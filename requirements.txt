@@ -1,0 +1,8 @@
+crewai>=0.74.0
+langchain-community>=0.3.0
+langchain-groq>=0.3.0
+langchain-huggingface>=0.0.3
+litellm>=1.44.2
+duckduckgo-search>=6.2.0
+python-dotenv>=1.0.1
+huggingface_hub>=0.23.0

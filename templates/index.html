@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudeep Search - Boss, What You Want?</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/S.png') }}">
+</head>
+<body>
+    <div class="container homepage">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/Sudeep.png') }}" alt="Sudeep Search Logo">
+        </div>
+        <form action="/search" method="GET" class="search-form">
+            <input type="text" name="q" placeholder="What macha?" class="search-input">
+            <div class="button-group">
+                <button type="submit" class="search-button">Sudeep Search, Macha!</button>
+                <button type="button" class="search-button feeling-lucky">I'm Feeling Lucky (with Sudeep!)</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        &copy; 2025 Sudeep Search. Created by <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>.
+    </footer>
+</body>
+</html

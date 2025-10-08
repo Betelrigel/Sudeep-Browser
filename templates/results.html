@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ query }} - Sudeep Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/S.png') }}">
+    <style>
+        /* Header Styles (Existing) */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 15px 30px;
+            background: #fff;
+            min-height: 70px;
+            box-shadow: none;
+        }
+        .logo-small {
+            height: 40px;
+            max-width: 120px;
+            width: auto;
+            margin-right: 20px;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 700px;
+            min-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .search-input {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 24px 0 0 24px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            background: #f8f9fa;
+            border-radius: 0 24px 24px 0;
+            cursor: pointer;
+            font-size: 16px;
+            color: #3c4043;
+        }
+        @media (max-width: 700px) {
+            .search-bar {
+                max-width: 100%;
+                margin: 0 10px;
+            }
+            .search-input {
+                flex: 0.7;
+                padding: 8px 15px;
+            }
+            .search-button {
+                padding: 8px 15px;
+            }
+        }
+
+        /* Results Page Styles (Provided CSS with Fix) */
+        .container {
+            max-width: 1160px;
+            width: 100%;
+            padding: 15px 20px 40px;
+            box-sizing: border-box;
+        }
+
+        .results-page {
+            padding-top: 10px;
+        }
+
+        .sudeep-mode {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.4;
+            box-shadow: none; /* Removed shadow to fix rectangular border */
+        }
+
+        .sudeep-mode h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #856404;
+            font-size: 16px;
+        }
+
+        .result-count {
+            color: #70757a;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .search-results .result-item {
+            margin-bottom: 25px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            margin: 0 0 4px 0;
+        }
+
+        .result-link {
+            color: #1a0dab;
+            text-decoration: none;
+            word-wrap: break-word;
+        }
+
+        .result-link:hover {
+            text-decoration: underline;
+        }
+
+        .result-url {
+            color: #70757a;
+            font-size: 13px;
+            margin-bottom: 4px;
+            word-wrap: break-word;
+        }
+
+        .result-snippet {
+            color: #545454;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="logo">
+            <img src="{{ url_for('static', filename='img/Sudeep.png') }}" alt="Sudeep Search Logo" class="logo-small">
+        </a>
+        <div class="search-bar">
+            <form action="/search" method="GET">
+                <input type="text" name="q" value="{{ query }}" placeholder="What macha?" class="search-input">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sudeep-mode">
+            <h3>Sudeep Mode:</h3>
+            <p>{{ comment }}</p>
+        </div>
+
+        <div class="search-results">
+            {% if results and results|length > 0 and results[0] != "No results, da!" and results[0] != "Ayyo, search crashed, da!" %}
+                <p class="result-count">About {{ results | length }} results (swalpa garam, da!)</p>
+                {% for result in results %}
+                    {% set url = result.split(' - ')[0] if ' - ' in result else result %}
+                    {% set snippet = result.split(' - ')[1] if ' - ' in result and result.split(' - ') | length > 1 else '' %}
+                    <div class="result-item">
+                        <h3 class="result-title">
+                            <a href="{{ url }}" target="_blank" class="result-link">{{ url | replace("https://", "") | replace("http://", "") }}</a>
+                        </h3>
+                        <div class="result-url">{{ url }}</div>
+                        <div class="result-snippet">{{ snippet }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Ayyo, no results for "{{ query }}". Try again, da!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
