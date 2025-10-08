@@ -5,3 +5,4 @@ litellm>=1.44.2
 duckduckgo-search>=6.2.0
 python-dotenv>=1.0.1
 huggingface_hub>=0.23.0
+flask>=2.0.0  
