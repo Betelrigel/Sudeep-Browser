@@ -4,6 +4,7 @@ from duckduckgo_search import DDGS
 from dotenv import load_dotenv
 import litellm
 import logging
+import re # Import the regular expression module
 
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -17,7 +18,9 @@ class SudeepSearchCrew:
         self.groq_api_key = os.getenv("GROQ_API_KEY")
         if not self.groq_api_key:
             logging.error("GROQ_API_KEY not set in .env file. LLM features will not work.")
-            raise ValueError("GROQ_API_KEY not set in .env file. LLM functionality requires it.")
+            # Removed the raise ValueError here to allow the script to run even without API key,
+            # but LLM features will be disabled as intended.
+            # raise ValueError("GROQ_API_KEY not set in .env file. LLM functionality requires it.")
         else:
             logging.info(f"Initialized with Groq API Key starting with: {self.groq_api_key[:4]}...")
 
@@ -62,18 +65,34 @@ class SudeepSearchCrew:
             logging.error(f"Unexpected error during specific data extraction for '{query}': {e}")
             return None # Return None for any other unexpected errors
 
+    def _clean_result_string(self, result_string: str) -> str:
+        """
+        Removes leading numbering (e.g., "1. ", "1. #", "2. ") from a string.
+        Handles cases where the URL or snippet might be missing.
+        """
+        if not result_string:
+            return ""
+
+        # This regex looks for:
+        # - Start of the string (^)
+        # - Zero or more digits (\d*)
+        # - A dot (\.?) (optional dot)
+        # - Zero or more spaces or hashes ([ #]*)
+        # - Followed by the actual content
+        # It then returns the matched content after these leading characters.
+        cleaned_string = re.sub(r'^\d*\.?[ #]*', '', result_string.strip())
+        return cleaned_string
+
     def fetch_results(self, query: str):
         """
         Fetches search results. Tries specific JSON extraction first,
         then falls back to DDGS. Returns a list of formatted strings
-        or an error message list.
+        or an error message list. ALL results are cleaned of leading numbers.
         """
         specific_data = None  # Initialize to None
         try:
             specific_data = self._text_extract_json(query)
         except Exception as e:
-            # This catch is crucial. It will catch any exceptions from _text_extract_json
-            # and ensure specific_data remains None, leading to the DDGS fallback.
             logging.error(f"Error during specific data extraction for '{query}': {e}. Falling back to DDGS.")
             specific_data = None # Ensure it's None if an error occurred
 
@@ -83,32 +102,50 @@ class SudeepSearchCrew:
             for item in specific_data['results']:
                 url = item.get('href', '#')
                 body = item.get('body', 'No description available, da!')
-                parsed_results.append(f"{url} - {body}")
+                # Combine URL and body, then clean the entire resulting string
+                combined_result = f"{url} - {body}"
+                cleaned_result = self._clean_result_string(combined_result)
+                parsed_results.append(cleaned_result)
             
-            return parsed_results[:10] if parsed_results else [f"No specific results found for '{query}', da! (Empty list from source)"]
+            # Filter out any empty strings that might result from cleaning
+            final_results = [r for r in parsed_results if r and r != '-' and r != ' - ']
+            
+            if final_results:
+                return final_results[:10]
+            else:
+                return [f"No specific results found for '{query}', da! (Empty list from source after cleaning)"]
         else:
             # Fallback to DDGS if specific extraction failed (returned None) or returned no valid results
             logging.info(f"Specific data not found or invalid for '{query}'. Falling back to DDGS.")
             try:
                 with DDGS() as ddgs:
-                    # Added a check here to ensure ddgs.text returns a list before converting to list
-                    # And explicitly handle cases where it might return an iterator or None
                     ddgs_results_iterator = ddgs.text(query, max_results=10)
-                    
-                    # Convert iterator to list safely
                     ddgs_results = list(ddgs_results_iterator) if ddgs_results_iterator else []
                 
                 if ddgs_results:
-                    parsed = [f"{r['href']} - {r.get('body', 'No snippet available, da!')}" for r in ddgs_results]
-                    logging.info(f"DDGS search successful for '{query}'. Found {len(parsed)} results.")
-                    return parsed[:10] if parsed else [f"No results found from DDGS for '{query}', da! (Empty list from DDGS)"]
+                    parsed = []
+                    for r in ddgs_results:
+                        url = r.get('href', '#')
+                        body = r.get('body', 'No snippet available, da!')
+                        # Combine URL and body, then clean the entire resulting string
+                        combined_result = f"{url} - {body}"
+                        cleaned_result = self._clean_result_string(combined_result)
+                        parsed.append(cleaned_result)
+                        
+                    # Filter out any empty strings that might result from cleaning
+                    final_results = [r for r in parsed if r and r != '-' and r != ' - ']
+                    
+                    if final_results:
+                        logging.info(f"DDGS search successful for '{query}'. Found {len(final_results)} results after cleaning.")
+                        return final_results[:10]
+                    else:
+                        logging.warning(f"DDGS returned results for '{query}', but all were empty after cleaning.")
+                        return [f"No valid results found from DDGS for '{query}', da! (All results were empty after cleaning)"]
                 else:
                     logging.warning(f"DDGS returned no results for query '{query}'.")
                     return [f"No results found from DDGS for '{query}', da!"]
             except Exception as e:
-                # This block now correctly catches only DDGS-specific errors.
                 logging.error(f"DDGS fetch error for query '{query}': {e}")
-                # Return a distinct, untranslatable error message.
                 return [f"Ayyo, DDGS search failed for '{query}', da! The search engine is taking a chai break, macha!"]
 
     def translate_results(self, results: list, query: str):
@@ -142,13 +179,23 @@ class SudeepSearchCrew:
             
             translated_content = response.choices[0].message.content.strip()
             translated_lines = translated_content.split('\n')
-            translated_lines = [line for line in translated_lines if line.strip()]
             
-            if translated_lines:
-                logging.info("Translation successful.")
-                return translated_lines
+            # Clean the translated lines to ensure no numbering persists from LLM output
+            cleaned_translated_lines = []
+            for line in translated_lines:
+                if line.strip():
+                    # Use the same cleaning logic as in fetch_results
+                    cleaned_line = self._clean_result_string(line)
+                    cleaned_translated_lines.append(cleaned_line)
+            
+            # Filter out any empty strings that might result from cleaning
+            final_translated_lines = [r for r in cleaned_translated_lines if r and r != '-' and r != ' - ']
+
+            if final_translated_lines:
+                logging.info("Translation successful and cleaned.")
+                return final_translated_lines
             else:
-                logging.warning("Translation returned empty lines. Returning original results.")
+                logging.warning("Translation returned empty or only whitespace lines after cleaning. Returning original results.")
                 return results
 
         except Exception as e:
@@ -204,14 +251,17 @@ class SudeepSearchCrew:
             
         results = []
         try:
-            raw_results = self.fetch_results(query) # This handles _text_extract_json and DDGS fallback
-            # Check if raw_results is a list and if the first item is an error message.
-            # If it's an error message, we shouldn't attempt to translate it.
+            # fetch_results now handles cleaning of numbering
+            raw_results = self.fetch_results(query) 
+            
+            # Check if the first result looks like a generic error message (starts with "Ayyo")
+            # If it is an error, we don't attempt translation.
             if isinstance(raw_results, list) and raw_results and raw_results[0].startswith("Ayyo"):
                 logging.info("Skipping translation for error results.")
                 results = raw_results
             else:
-                translated_results = self.translate_results(raw_results, query) # Translates if not an error message
+                # translate_results also cleans its output as a safeguard
+                translated_results = self.translate_results(raw_results, query) 
                 results = translated_results
 
         except Exception as e:
@@ -236,7 +286,7 @@ if __name__ == "__main__":
         crew_food = SudeepSearchCrew()
         output_food = crew_food.kickoff("food")
         print(f"Output for 'food': {json.dumps(output_food, indent=2)}")
-    except ValueError as e:
+    except ValueError as e: # This catch is now less critical as init doesn't raise
         print(f"Could not initialize crew for 'food' test: {e}")
 
     print("\n--- Testing with 'cpu' ---")
