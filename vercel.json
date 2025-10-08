@@ -1,11 +1,9 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": { "runtime": "python3.11" } 
-      // You can change the runtime to python3.9, python3.10, python3.12 etc.
-      // Make sure it matches what you used for development.
+      "use": "@vercel/python"
     }
   ],
   "routes": [
@@ -14,8 +12,12 @@
       "dest": "/static/$1"
     },
     {
+      "src": "/templates/(.*)",
+      "dest": "/templates/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/api/index.py/$1"
+      "dest": "api/index.py"
     }
   ]
 }
