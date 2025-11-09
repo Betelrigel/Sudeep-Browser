@@ -6,73 +6,111 @@
     <title>{{ query }} - Sudeep Search Results</title>
     <link rel="icon" type="image/png" href="/S.png">
     <style>
-        /* Header Styles (Existing) */
+        /* Body layout ensures full height and centering */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        /* Header Styles */
         .header {
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            padding: 15px 30px;
+            padding: 12px 20px;
             background: #fff;
-            min-height: 70px;
+            min-height: 60px;
             box-shadow: none;
+            max-width: 1160px;
+            width: 100%;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e4e4e4;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .logo-small {
+
+        .logo {
+            flex-shrink: 0;
+        }
+
+        .logo img {
             height: 40px;
             max-width: 120px;
             width: auto;
-            margin-right: 20px;
+            vertical-align: middle;
+            display: block;
+            object-fit: contain;
         }
+
         .search-bar {
             display: flex;
             align-items: center;
             flex: 1;
-            max-width: 700px;
-            min-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
+            min-width: 0;
         }
+
+        .search-bar form {
+            display: flex;
+            width: 100%;
+            min-width: 0;
+        }
+
         .search-input {
             flex: 1;
-            padding: 10px 20px;
-            border: none;
+            padding: 10px 16px;
+            border: 1px solid #dfe1e5;
             border-radius: 24px 0 0 24px;
             font-size: 16px;
             box-sizing: border-box;
             background: #fff;
+            outline: none;
+            min-width: 0;
+            min-height: 44px; /* Match button height for alignment */
+            -webkit-appearance: none;
+            appearance: none;
         }
+
+        .search-input:focus {
+            border-color: #4285f4;
+        }
+
         .search-button {
             padding: 10px 20px;
-            border: none;
+            border: 1px solid #dfe1e5;
+            border-left: none;
             background: #f8f9fa;
             border-radius: 0 24px 24px 0;
             cursor: pointer;
             font-size: 16px;
             color: #3c4043;
-        }
-        @media (max-width: 700px) {
-            .search-bar {
-                max-width: 100%;
-                margin: 0 10px;
-            }
-            .search-input {
-                flex: 0.7;
-                padding: 8px 15px;
-            }
-            .search-button {
-                padding: 8px 15px;
-            }
+            white-space: nowrap;
+            min-height: 44px; /* Minimum touch target size for mobile */
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
 
-        /* Results Page Styles (Provided CSS with Fix) */
+        .search-button:hover {
+            background: #f1f3f4;
+        }
+
+        .search-button:active {
+            background: #e8eaed;
+        }
+
+        /* Results Page Styles */
         .container {
             max-width: 1160px;
             width: 100%;
             padding: 15px 20px 40px;
             box-sizing: border-box;
-        }
-
-        .results-page {
-            padding-top: 10px;
         }
 
         .sudeep-mode {
@@ -83,8 +121,10 @@
             margin-bottom: 20px;
             color: #856404;
             font-size: 14px;
-            line-height: 1.4;
-            box-shadow: none; /* Removed shadow to fix rectangular border */
+            line-height: 1.5;
+            box-shadow: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .sudeep-mode h3 {
@@ -92,6 +132,12 @@
             margin-bottom: 8px;
             color: #856404;
             font-size: 16px;
+        }
+
+        .sudeep-mode p {
+            margin: 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .result-count {
@@ -102,17 +148,23 @@
 
         .search-results .result-item {
             margin-bottom: 25px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .result-title {
             font-size: 18px;
             margin: 0 0 4px 0;
+            line-height: 1.3;
         }
 
         .result-link {
             color: #1a0dab;
             text-decoration: none;
             word-wrap: break-word;
+            overflow-wrap: break-word;
+            display: inline-block;
+            max-width: 100%;
         }
 
         .result-link:hover {
@@ -124,47 +176,262 @@
             font-size: 13px;
             margin-bottom: 4px;
             word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.4;
         }
 
         .result-snippet {
             color: #545454;
             font-size: 13px;
             line-height: 1.5;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            margin-top: 3px;
         }
-         /* From style.css – Relevant for results.html */
 
-/* Header (used in results page) */
-.header {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;           /* Matches the compact Google-like padding */
-    max-width: 1160px;
-    width: 100%;
-    box-sizing: border-box;
-    border-bottom: 1px solid #e4e4e4;
-}
+        .result-metadata {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
 
-/* Smaller logo used in results page header */
-.logo img {
-    height: 46px;                 /* Half size of homepage logo */
-    width: 136px;
-    vertical-align: middle;
-    display: block;
-    object-fit: contain;
-}
+        .result-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-/* Body layout ensures full height and centering (indirectly helps container) */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    align-items: center;
-}
+        .result-rating-value {
+            color: #70757a;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .result-stars {
+            display: flex;
+            gap: 1px;
+        }
+
+        .result-star {
+            color: #fbbc04;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .result-reviews {
+            color: #70757a;
+            font-size: 12px;
+        }
+
+        .result-duration {
+            color: #70757a;
+            font-size: 12px;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 15px;
+                min-height: auto;
+            }
+
+            .logo img {
+                height: 35px;
+                max-width: 100px;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .search-input {
+                padding: 9px 14px;
+                font-size: 16px; /* Prevent zoom on iOS */
+                border-radius: 20px 0 0 20px;
+                min-height: 44px;
+            }
+
+            .search-button {
+                padding: 9px 16px;
+                font-size: 14px;
+                border-radius: 0 20px 20px 0;
+                min-height: 44px;
+            }
+
+            .container {
+                padding: 12px 15px 30px;
+            }
+
+            .sudeep-mode {
+                padding: 10px;
+                font-size: 13px;
+                margin-bottom: 15px;
+            }
+
+            .sudeep-mode h3 {
+                font-size: 15px;
+                margin-bottom: 6px;
+            }
+
+            .result-count {
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+
+            .search-results .result-item {
+                margin-bottom: 20px;
+            }
+
+            .result-title {
+                font-size: 16px;
+            }
+
+            .result-url {
+                font-size: 12px;
+            }
+
+            .result-snippet {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 12px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .logo {
+                align-self: flex-start;
+            }
+
+            .logo img {
+                height: 32px;
+                max-width: 90px;
+            }
+
+            .search-bar {
+                margin-top: 0;
+            }
+
+            .search-input {
+                padding: 8px 12px;
+                font-size: 16px;
+                border-radius: 18px 0 0 18px;
+                min-height: 44px;
+            }
+
+            .search-button {
+                padding: 8px 14px;
+                font-size: 13px;
+                border-radius: 0 18px 18px 0;
+                min-height: 44px;
+            }
+
+            .container {
+                padding: 10px 12px 25px;
+            }
+
+            .sudeep-mode {
+                padding: 10px;
+                font-size: 12px;
+                margin-bottom: 12px;
+                border-radius: 6px;
+            }
+
+            .sudeep-mode h3 {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .result-count {
+                font-size: 11px;
+                margin-bottom: 10px;
+            }
+
+            .search-results .result-item {
+                margin-bottom: 18px;
+            }
+
+            .result-title {
+                font-size: 15px;
+                margin-bottom: 3px;
+            }
+
+            .result-link {
+                font-size: 15px;
+            }
+
+            .result-url {
+                font-size: 11px;
+                margin-bottom: 3px;
+            }
+
+            .result-snippet {
+                font-size: 11px;
+                line-height: 1.4;
+            }
+        }
+
+        /* Very small devices */
+        @media (max-width: 360px) {
+            .header {
+                padding: 6px 10px;
+            }
+
+            .logo img {
+                height: 28px;
+                max-width: 80px;
+            }
+
+            .search-input {
+                padding: 7px 10px;
+                font-size: 16px;
+                min-height: 44px;
+            }
+
+            .search-button {
+                padding: 7px 12px;
+                font-size: 12px;
+                min-height: 44px;
+            }
+
+            .container {
+                padding: 8px 10px 20px;
+            }
+
+            .sudeep-mode {
+                padding: 8px;
+                font-size: 11px;
+            }
+
+            .result-title {
+                font-size: 14px;
+            }
+
+            .result-url,
+            .result-snippet {
+                font-size: 10px;
+            }
+        }
+
+        /* Landscape orientation for mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .search-bar {
+                margin-top: 0;
+                width: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -191,16 +458,73 @@ body {
             {% if results and results|length > 0 and not is_error %}
                 <p class="result-count">About {{ results | length }} results (swalpa garam, da!)</p>
                 {% for result in results %}
-                    {% set url = result.split(' - ')[0] if ' - ' in result else result %}
-                    {% set snippet = result.split(' - ')[1] if ' - ' in result and result.split(' - ') | length > 1 else '' %}
-                    {% if url and url != '#' and (url.startswith('http://') or url.startswith('https://')) %}
-                        <div class="result-item">
-                            <h3 class="result-title">
-                                <a href="{{ url }}" target="_blank" class="result-link">{{ url | replace("https://", "") | replace("http://", "") }}</a>
-                            </h3>
-                            <div class="result-url">{{ url }}</div>
-                            <div class="result-snippet">{{ snippet }}</div>
-                        </div>
+                    {% if '|' in result %}
+                        {# New structured format: title|url|body #}
+                        {% set parts = result.split('|') %}
+                        {% if parts|length >= 3 %}
+                            {% set title = parts[0] %}
+                            {% set url = parts[1] %}
+                            {% set body = parts[2] %}
+                            
+                            {% if url and url != '#' and (url.startswith('http://') or url.startswith('https://')) %}
+                                {% set rating = parts[3] if parts|length > 3 and parts[3] else '' %}
+                                {% set reviews = parts[4] if parts|length > 4 and parts[4] else '' %}
+                                {% set duration = parts[5] if parts|length > 5 and parts[5] else '' %}
+                                
+                                <div class="result-item">
+                                    <h3 class="result-title">
+                                        <a href="{{ url }}" target="_blank" class="result-link">{{ title }}</a>
+                                    </h3>
+                                    <div class="result-url">{{ url }}</div>
+                                    <div class="result-snippet">{{ body }}</div>
+                                    {% if rating or reviews or duration %}
+                                        <div class="result-metadata">
+                                            {% if rating %}
+                                                <div class="result-rating">
+                                                    <span class="result-rating-value">{{ rating }}</span>
+                                                    <div class="result-stars">
+                                                        {% set rating_parts = rating.split('.') %}
+                                                        {% if rating_parts|length > 0 %}
+                                                            {% set rating_int = rating_parts[0]|int %}
+                                                            {% for i in range(5) %}
+                                                                {% if i < rating_int %}
+                                                                    <span class="result-star">★</span>
+                                                                {% else %}
+                                                                    <span class="result-star" style="color: #dadce0;">★</span>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            {% for i in range(5) %}
+                                                                <span class="result-star" style="color: #dadce0;">★</span>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if reviews %}
+                                                <span class="result-reviews">({{ reviews }})</span>
+                                            {% endif %}
+                                            {% if duration %}
+                                                <span class="result-duration">{{ duration }}</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {# Legacy format: url - body #}
+                        {% set url = result.split(' - ')[0] if ' - ' in result else result %}
+                        {% set snippet = result.split(' - ')[1] if ' - ' in result and result.split(' - ') | length > 1 else '' %}
+                        {% if url and url != '#' and (url.startswith('http://') or url.startswith('https://')) %}
+                            <div class="result-item">
+                                <h3 class="result-title">
+                                    <a href="{{ url }}" target="_blank" class="result-link">{{ url | replace("https://", "") | replace("http://", "") }}</a>
+                                </h3>
+                                <div class="result-url">{{ url }}</div>
+                                <div class="result-snippet">{{ snippet }}</div>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             {% elif is_error %}
