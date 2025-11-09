@@ -8,11 +8,7 @@
   ],
   "routes": [
     {
-      "src": "/S\\.png",
-      "dest": "/api/index.py"
-    },
-    {
-      "src": "/Sudeep\\.png",
+      "src": "/(S\\.png|Sudeep\\.png)",
       "dest": "/api/index.py"
     },
     {
