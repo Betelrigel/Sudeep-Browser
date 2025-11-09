@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ query }} - Sudeep Search Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/S.png') }}">
     <style>
         /* Header Styles (Existing) */
@@ -132,6 +131,40 @@
             font-size: 13px;
             line-height: 1.5;
         }
+        /* From style.css – Relevant for results.html */
+
+/* Header (used in results page) */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;           /* Matches the compact Google-like padding */
+    max-width: 1160px;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+/* Smaller logo used in results page header */
+.logo img {
+    height: 46px;                 /* Half size of homepage logo */
+    width: 136px;
+    vertical-align: middle;
+    display: block;
+    object-fit: contain;
+}
+
+/* Body layout ensures full height and centering (indirectly helps container) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+}
     </style>
 </head>
 <body>
