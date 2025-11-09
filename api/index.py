@@ -55,7 +55,7 @@ def search():
             comment = crew_output.get('comment', "Aiyoo, my agents forgot their lines, too much garam weather, macha!")
             print(f"Results: {len(results)}")
         except Exception as e:
-            print68(f"Search error: {e}")
+            print(f"Search error: {e}")
             results = [f"Ayyo, Search System crashed for '{query}', da!"]
             comment = "System error!"
 

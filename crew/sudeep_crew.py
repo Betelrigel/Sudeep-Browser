@@ -67,20 +67,27 @@ class SudeepSearchCrew:
 
     def _clean_result_string(self, result_string: str) -> str:
         """
-        Removes leading numbering (e.g., "1. ", "1. #", "2. ") from a string.
-        Handles cases where the URL or snippet might be missing.
+        Removes leading numbering (e.g., "1. ", "1. #", "2. "), markdown formatting (asterisks),
+        and leading dashes from a string. Handles cases where the URL or snippet might be missing.
         """
         if not result_string:
             return ""
 
+        # First, remove markdown formatting (asterisks for bold/italic)
+        cleaned_string = re.sub(r'\*\*?', '', result_string)
+        
+        # Remove leading numbering, dots, spaces, hashes, and dashes
         # This regex looks for:
         # - Start of the string (^)
         # - Zero or more digits (\d*)
         # - A dot (\.?) (optional dot)
-        # - Zero or more spaces or hashes ([ #]*)
+        # - Zero or more spaces, hashes, or dashes ([ #-]*)
         # - Followed by the actual content
-        # It then returns the matched content after these leading characters.
-        cleaned_string = re.sub(r'^\d*\.?[ #]*', '', result_string.strip())
+        cleaned_string = re.sub(r'^\d*\.?[ #-]*', '', cleaned_string.strip())
+        
+        # Also remove any leading dash that might remain after the above
+        cleaned_string = cleaned_string.lstrip('-').strip()
+        
         return cleaned_string
 
     def fetch_results(self, query: str):
@@ -154,9 +161,10 @@ class SudeepSearchCrew:
             logging.warning("GROQ API key not available. Skipping translation.")
             return results
             
-        # Check if the first result looks like a generic error message (starts with "Ayyo")
-        # This ensures we don't try to translate error messages returned by fetch_results
-        if not results or any(r.startswith("Ayyo") for r in results):
+        # Check if results contain error messages - skip translation for these
+        # Error messages typically start with "Ayyo", "No results", or "No specific results"
+        error_indicators = ["Ayyo", "No results", "No specific results", "No valid results"]
+        if not results or any(any(indicator in r for indicator in error_indicators) for r in results):
             logging.info("Skipping translation for error messages or empty results.")
             return results
             
@@ -254,9 +262,14 @@ class SudeepSearchCrew:
             # fetch_results now handles cleaning of numbering
             raw_results = self.fetch_results(query) 
             
-            # Check if the first result looks like a generic error message (starts with "Ayyo")
-            # If it is an error, we don't attempt translation.
-            if isinstance(raw_results, list) and raw_results and raw_results[0].startswith("Ayyo"):
+            # Check if results contain error messages - skip translation for these
+            # translate_results will also check, but we do it here for clarity
+            error_indicators = ["Ayyo", "No results", "No specific results", "No valid results"]
+            is_error = isinstance(raw_results, list) and raw_results and any(
+                any(indicator in r for indicator in error_indicators) for r in raw_results
+            )
+            
+            if is_error:
                 logging.info("Skipping translation for error results.")
                 results = raw_results
             else:
