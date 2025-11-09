@@ -8,16 +8,16 @@
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "src": "/S\\.png",
+      "dest": "/api/index.py"
     },
     {
-      "src": "/templates/(.*)",
-      "dest": "/templates/$1"
+      "src": "/Sudeep\\.png",
+      "dest": "/api/index.py"
     },
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "/api/index.py"
     }
   ]
 }

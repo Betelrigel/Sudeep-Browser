@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudeep Search - Boss, What You Want?</title>
    
-     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/S.png') }}">
+     <link rel="icon" type="image/png" href="/S.png">
      <style>
          /* Basic Reset & Body Styles */
 body {
@@ -137,7 +137,7 @@ footer {
 <body>
     <div class="container homepage">
         <div class="logo">
-            <img src="{{ url_for('static', filename='img/Sudeep.png') }}" alt="Sudeep Search Logo">
+            <img src="/Sudeep.png" alt="Sudeep Search Logo" class="logo-small">
         </div>
         <form action="/search" method="GET" class="search-form">
             <input type="text" name="q" placeholder="What macha?" class="search-input">

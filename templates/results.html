@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ query }} - Sudeep Search Results</title>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/S.png') }}">
+    <link rel="icon" type="image/png" href="/S.png">
     <style>
         /* Header Styles (Existing) */
         .header {
@@ -131,7 +131,7 @@
             font-size: 13px;
             line-height: 1.5;
         }
-        /* From style.css – Relevant for results.html */
+         /* From style.css – Relevant for results.html */
 
 /* Header (used in results page) */
 .header {
@@ -170,7 +170,7 @@ body {
 <body>
     <div class="header">
         <a href="/" class="logo">
-            <img src="{{ url_for('static', filename='img/Sudeep.png') }}" alt="Sudeep Search Logo" class="logo-small">
+            <img src="/Sudeep.png" alt="Sudeep Search Logo" class="logo-small">
         </a>
         <div class="search-bar">
             <form action="/search" method="GET">
