@@ -4,255 +4,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudeep Search - Boss, What You Want?</title>
-   
-     <link rel="icon" type="image/png" href="/S.png">
-     <style>
-         /* Basic Reset & Body Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    align-items: center;
-}
-
-/* Homepage Styles */
-.homepage {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 20px;
-    margin-top: 80px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.logo {
-    margin-bottom: 8px;
-}
-
-.logo img {
-    height: 92px;
-    width: 272px;
-    max-width: 100%;
-    vertical-align: middle;
-    display: block;
-    object-fit: contain;
-}
-
-.search-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 584px;
-    margin-bottom: 20px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 12px 20px;
-    border: 1px solid #dfe1e5;
-    border-radius: 24px;
-    font-size: 16px;
-    outline: none;
-    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.search-input:focus {
-    border-color: #4285f4;
-    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-}
-
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.search-button {
-    background-color: #f8f9fa;
-    border: 1px solid #f8f9fa;
-    border-radius: 4px;
-    color: #3c4043;
-    font-size: 14px;
-    padding: 10px 16px;
-    cursor: pointer;
-    outline: none;
-    min-width: 90px;
-    min-height: 44px; /* Minimum touch target size for mobile */
-    flex: 1 1 auto;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    word-wrap: break-word;
-    white-space: normal;
-}
-
-.search-button:hover {
-    border-color: #dadce0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    color: #202124;
-}
-
-.search-button:active {
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.feeling-lucky {
-    background-color: #f8f9fa;
-}
-
-.feeling-lucky:hover {
-    border-color: #dadce0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    color: #202124;
-}
-
-footer {
-    text-align: center;
-    padding: 10px 20px;
-    background: #fff;
-    padding-bottom: 50px;
-    font-size: 12px;
-    color: #666;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-footer a {
-    color: #1a0dab;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-/* Mobile Responsive Styles */
-@media (max-width: 768px) {
-    .homepage {
-        margin-top: 40px;
-        padding: 0 15px;
-    }
-
-    .logo img {
-        height: 70px;
-        width: 210px;
-    }
-
-    .search-form {
-        max-width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .search-input {
-        padding: 10px 16px;
-        font-size: 16px; /* Prevent zoom on iOS */
-        margin-bottom: 12px;
-    }
-
-    .button-group {
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-    }
-
-    .search-button {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 14px;
-        min-height: 44px;
-        line-height: 1.4;
-    }
-
-    footer {
-        font-size: 11px;
-        padding: 10px 15px 30px;
-    }
-}
-
-@media (max-width: 480px) {
-    .homepage {
-        margin-top: 30px;
-        padding: 0 10px;
-    }
-
-    .logo {
-        margin-bottom: 20px;
-    }
-
-    .logo img {
-        height: 60px;
-        width: 180px;
-    }
-
-    .search-input {
-        padding: 10px 14px;
-        font-size: 16px;
-        border-radius: 20px;
-    }
-
-    .search-button {
-        padding: 11px 14px;
-        font-size: 13px;
-        border-radius: 4px;
-        min-height: 44px;
-        line-height: 1.3;
-    }
-
-    footer {
-        font-size: 10px;
-        padding: 8px 10px 25px;
-        line-height: 1.5;
-    }
-}
-
-/* Very small devices */
-@media (max-width: 360px) {
-    .logo img {
-        height: 50px;
-        width: 150px;
-    }
-
-    .search-input {
-        padding: 9px 12px;
-    }
-
-    .search-button {
-        padding: 10px 12px;
-        font-size: 12px;
-        min-height: 44px;
-        line-height: 1.3;
-    }
-}
-     </style>
+    <link rel="icon" type="image/png" href="/S.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+        .homepage {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            margin-top: 80px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .logo img {
+            height: 92px;
+            width: 272px;
+            max-width: 100%;
+            vertical-align: middle;
+            display: block;
+            object-fit: contain;
+        }
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 584px;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .search-input:focus {
+            border-color: #4285f4;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .search-button {
+            background-color: #f8f9fa;
+            border: 1px solid #f8f9fa;
+            border-radius: 4px;
+            color: #3c4043;
+            font-size: 14px;
+            padding: 10px 16px;
+            cursor: pointer;
+            outline: none;
+            min-width: 90px;
+            min-height: 44px;
+            flex: 1 1 auto;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .search-button:hover {
+            border-color: #dadce0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            color: #202124;
+        }
+        .search-button:active {
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: #fff;
+            padding-bottom: 50px;
+            font-size: 12px;
+            color: #666;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        footer a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .homepage { margin-top: 40px; padding: 0 15px; }
+            .logo img { height: 70px; width: 210px; }
+            .search-form { max-width: 100%; }
+            .search-input { padding: 10px 16px; font-size: 16px; margin-bottom: 12px; }
+            .button-group { flex-direction: column; gap: 8px; width: 100%; }
+            .search-button { width: 100%; padding: 12px 16px; font-size: 14px; min-height: 44px; line-height: 1.4; }
+            footer { font-size: 11px; padding: 10px 15px 30px; }
+        }
+        @media (max-width: 480px) {
+            .homepage { margin-top: 30px; padding: 0 10px; }
+            .logo img { height: 60px; width: 180px; }
+            .search-input { padding: 10px 14px; font-size: 16px; border-radius: 20px; }
+            .search-button { padding: 11px 14px; font-size: 13px; border-radius: 4px; min-height: 44px; line-height: 1.3; }
+            footer { font-size: 10px; padding: 8px 10px 25px; line-height: 1.5; }
+        }
+        @media (max-width: 360px) {
+            .logo img { height: 50px; width: 150px; }
+            .search-input { padding: 9px 12px; }
+            .search-button { padding: 10px 12px; font-size: 12px; min-height: 44px; line-height: 1.3; }
+        }
+    </style>
 </head>
 <body>
     <div class="container homepage">
         <div class="logo">
-            <img src="/Sudeep.png" alt="Sudeep Search Logo" class="logo-small">
+            <img src="/Sudeep.png" alt="Sudeep Search Logo">
         </div>
-        <form action="/search" method="GET" class="search-form">
-            <input type="text" name="q" placeholder="What macha?" class="search-input">
+
+        <!-- GPS CITY DETECTION -->
+        <input type="hidden" id="detected-city" value="Bangalore">
+
+        <form id="search-form" action="/search" method="GET" class="search-form">
+            <input type="text" name="q" id="query-input" placeholder="What macha?" class="search-input" autocomplete="off" required>
+            <input type="hidden" name="city" id="city-input" value="Bangalore">
             <div class="button-group">
                 <button type="submit" class="search-button">Sudeep Search, Macha!</button>
-                <button type="button" class="search-button feeling-lucky">I'm Feeling Lucky (with Sudeep!)</button>
+                <button type="button" id="lucky-button" class="search-button feeling-lucky">I'm Feeling Lucky (with Sudeep!)</button>
             </div>
         </form>
     </div>
+
     <footer>
-        &copy; 2025 Sudeep Search. Created by <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>.
+        © 2025 Sudeep Search. Created by <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>.
     </footer>
+
+    <script>
+        // === DETECT CITY VIA GPS ===
+        async function detectCity() {
+            const cityInput = document.getElementById('city-input');
+            if ("geolocation" in navigator) {
+                try {
+                    const position = await new Promise((resolve, reject) => 
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 })
+                    );
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1`);
+                    const data = await res.json();
+                    const city = data.address?.city || data.address?.town || data.address?.village || "Bangalore";
+                    cityInput.value = city;
+                    console.log("Detected City:", city);
+                } catch (err) {
+                    console.log("GPS failed, using Bangalore");
+                    cityInput.value = "Bangalore";
+                }
+            } else {
+                cityInput.value = "Bangalore";
+            }
+        }
+
+        // Run on page load
+        window.onload = detectCity;
+
+        // === I'M FEELING LUCKY ===
+        document.getElementById('lucky-button').addEventListener('click', () => {
+            const query = document.getElementById('query-input').value.trim();
+            const city = document.getElementById('city-input').value;
+            if (!query) {
+                alert("Ayyo, type something da!");
+                return;
+            }
+            window.location.href = `/search?q=${encodeURIComponent(query)}&city=${encodeURIComponent(city)}&lucky=1`;
+        });
+    </script>
 </body>
-</html
+</html>
