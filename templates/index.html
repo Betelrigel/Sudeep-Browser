@@ -92,32 +92,32 @@
         .search-button:active {
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-            footer {
-        text-align: center;
-        padding: 12px 20px;
-        background: #fff;
-        font-size: 12px;
-        color: #666;
-        width: 100%;
-        box-sizing: border-box;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        z-index: 10;
-        border-top: 1px solid #eee;
-    }
-    footer a {
-        color: #1a0dab;
-        text-decoration: none;
-    }
-    footer a:hover {
-        text-decoration: underline;
-    }
+        footer {
+            text-align: center;
+            padding: 12px 20px;
+            background: #fff;
+            font-size: 12px;
+            color: #666;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+            border-top: 1px solid #eee;
+        }
+        footer a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
 
-/* Adjust bottom padding so content doesn’t overlap footer */
-body {
-    padding-bottom: 70px;
-}
+        /* Adjust bottom padding so content doesn’t overlap footer */
+        body {
+            padding-bottom: 70px;
+        }
 
         @media (max-width: 768px) {
             .homepage { margin-top: 40px; padding: 0 15px; }
@@ -148,9 +148,7 @@ body {
             <img src="/Sudeep.png" alt="Sudeep Search Logo">
         </div>
 
-        <!-- GPS CITY DETECTION -->
-        <input type="hidden" id="detected-city" value="Bangalore">
-
+        <!-- City is now fixed to Bangalore, no GPS -->
         <form id="search-form" action="/search" method="GET" class="search-form">
             <input type="text" name="q" id="query-input" placeholder="What macha?" class="search-input" autocomplete="off" required>
             <input type="hidden" name="city" id="city-input" value="Bangalore">
@@ -163,37 +161,11 @@ body {
 
     <footer>
         © 2025 Sudeep Search. Created by 
-        <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>. <br><br
-        <a>Enjoying Sudeep? <a href="https://buymeacoffee.com/MarinaTS" target="_blank">Buy me a coffee ☕</a>
+        <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>. <br><br>
+        Enjoying Sudeep? <a href="https://buymeacoffee.com/MarinaTS" target="_blank">Buy me a coffee ☕</a>
     </footer>
-    
 
     <script>
-        // === DETECT CITY VIA GPS ===
-        async function detectCity() {
-            const cityInput = document.getElementById('city-input');
-            if ("geolocation" in navigator) {
-                try {
-                    const position = await new Promise((resolve, reject) => 
-                        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 })
-                    );
-                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1`);
-                    const data = await res.json();
-                    const city = data.address?.city || data.address?.town || data.address?.village || "Bangalore";
-                    cityInput.value = city;
-                    console.log("Detected City:", city);
-                } catch (err) {
-                    console.log("GPS failed, using Bangalore");
-                    cityInput.value = "Bangalore";
-                }
-            } else {
-                cityInput.value = "Bangalore";
-            }
-        }
-
-        // Run on page load
-        window.onload = detectCity;
-
         // === I'M FEELING LUCKY ===
         document.getElementById('lucky-button').addEventListener('click', () => {
             const query = document.getElementById('query-input').value.trim();
