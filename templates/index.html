@@ -92,23 +92,33 @@
         .search-button:active {
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-        footer {
-            text-align: center;
-            padding: 10px 20px;
-            background: #fff;
-            padding-bottom: 50px;
-            font-size: 12px;
-            color: #666;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        footer a {
-            color: #1a0dab;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
+            footer {
+        text-align: center;
+        padding: 12px 20px;
+        background: #fff;
+        font-size: 12px;
+        color: #666;
+        width: 100%;
+        box-sizing: border-box;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        border-top: 1px solid #eee;
+    }
+    footer a {
+        color: #1a0dab;
+        text-decoration: none;
+    }
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+/* Adjust bottom padding so content doesn’t overlap footer */
+body {
+    padding-bottom: 70px;
+}
+
         @media (max-width: 768px) {
             .homepage { margin-top: 40px; padding: 0 15px; }
             .logo img { height: 70px; width: 210px; }
@@ -153,7 +163,7 @@
 
     <footer>
         © 2025 Sudeep Search. Created by 
-        <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>. 
+        <a href="https://www.linkedin.com/in/marina-ts-446939212/" target="_blank">Marina TS</a>. <br>
         Enjoying Sudeep? <a href="https://buymeacoffee.com/MarinaTS" target="_blank">Buy me a coffee ☕</a>
     </footer>
     
